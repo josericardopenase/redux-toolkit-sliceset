@@ -44,7 +44,7 @@ function App() {
           <div>
             <h4>{pokemon.name}</h4>
             <div>{pokemon.url}</div>
-            <div onClick={() => pokemon.id ? destroyPokemon(pokemon.id) : null}>DESTRUIR POKEMON</div>
+            <div onClick={() => destroyPokemon(pokemon.id)}>DESTRUIR POKEMON</div>
           </div>
         ) 
       }
