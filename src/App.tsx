@@ -1,24 +1,53 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { Pokemon, PokemonService } from './storage/reducers/pokemons';
+import { RootState } from './storage/store';
 
 function App() {
+  
+
+  const {loading , list} : {loading : boolean, list: Pokemon[]} = useSelector(PokemonService.selectors.general)
+
+  const dispatch = useDispatch()
+
+
+
+
+  const addPokemon = () => {
+    dispatch(PokemonService.create({id : list.length + 1 , name : "Charmander", url : "Hello world" }))
+  }
+
+  const destroyPokemon = (id : number) => {
+    dispatch(PokemonService.destroy(id))
+  }
+
+  useEffect(() => {
+
+    dispatch(PokemonService.list());
+
+  }, [])
+
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div onClick={addPokemon}>Añadir nuevo pokemon</div>
+      
+      {
+        loading ?
+          <h1> loading</h1>
+          :
+        list.map((pokemon) => 
+          <div>
+            <h4>{pokemon.name}</h4>
+            <div>{pokemon.url}</div>
+            <div onClick={() => pokemon.id ? destroyPokemon(pokemon.id) : null}>DESTRUIR POKEMON</div>
+          </div>
+        ) 
+      }
     </div>
   );
 }
